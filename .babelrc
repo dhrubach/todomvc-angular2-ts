@@ -1,0 +1,17 @@
+{
+    "presets": [
+        [
+            "env",
+            {
+                "loose": true,
+                "modules": false
+            }
+        ],
+        "angular2"
+    ],
+    "plugins": [
+        [
+            "transform-runtime"
+        ]
+    ]
+}
