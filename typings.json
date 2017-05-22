@@ -1,0 +1,6 @@
+{
+  "name": "todomvc-angular2-ts",
+  "dependencies": {
+    "node-uuid": "registry:npm/node-uuid#1.4.7+20160723033700"
+  }
+}
