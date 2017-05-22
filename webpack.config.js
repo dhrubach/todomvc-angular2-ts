@@ -3,12 +3,24 @@
 const webpack = require('webpack');
 
 const config = {
-	entry: './app/main.js',
+	entry: './src/main.js',
 	output: {
-		filename: 'main.bundle.js'
+		filename: './dist/main.bundle.js'
 	},
 	module: {
-		loaders: [
+		rules: [
+			{
+				test: /\.ts$/,
+				exclude: /node_modules/,
+				use: [
+					{
+						loader: 'babel-loader'
+					},
+					{
+						loader: 'ts-loader'
+					}
+				]
+			},
 			{
 				test: /\.js$/,
 				loader: 'babel-loader',  // transpiles .js files using babel
@@ -20,7 +32,9 @@ const config = {
 			}
 		]
 	},
-
+	resolve: {
+		extensions: ['.ts', '.tsx', '.js']
+	},
 	devServer: {
 		historyApiFallback: true,
 		inline: true,
