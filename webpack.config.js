@@ -1,11 +1,13 @@
 'use strict';
 
 const webpack = require('webpack');
+const path = require('path');
 
 const config = {
 	entry: './src/main.js',
 	output: {
-		filename: './dist/main.bundle.js'
+		path: path.resolve(__dirname, 'dist'),
+		filename: 'main.bundle.js'
 	},
 	module: {
 		rules: [
@@ -20,6 +22,16 @@ const config = {
 						loader: 'ts-loader'
 					}
 				]
+			},
+			{
+				test: /\.ts$/,
+				exclude: /node_modules/,
+				enforce: 'pre',
+				loader: 'tslint-loader',
+				options: {
+					formattersDirectory: 'node_modules/custom-tslint-formatters/formatters',
+					formatter: 'grouped'
+				}
 			},
 			{
 				test: /\.js$/,
@@ -41,7 +53,7 @@ const config = {
 		open: true
 	},
 
-	devtool: 'source-map'
+	devtool: 'cheap-module-source-map'
 };
 
 module.exports = config;

@@ -2,5 +2,9 @@
   "name": "todomvc-angular2-ts",
   "dependencies": {
     "node-uuid": "registry:npm/node-uuid#1.4.7+20160723033700"
+  },
+  "globalDependencies": {
+    "node": "registry:dt/node#7.0.0+20170322231424",
+    "requirejs": "registry:dt/requirejs#2.1.20+20160921164505"
   }
 }
