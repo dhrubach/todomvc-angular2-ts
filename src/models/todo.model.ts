@@ -1,16 +1,14 @@
 import { v4 } from 'node-uuid';
 
 export class TodoModel {
-    
-    public title: string;
-    public uuid: string;
 
-    constructor(title: string, public completed: boolean) {
-        this.title = title.trim();
-        this.uuid = v4();
-    }
+	public uuid: string;
 
-    setTitle(title: string): void {
-        this.title = title;
-    }
+	constructor(public title: string, public completed: boolean) {
+		this.uuid = v4();
+	}
+
+	public setTitle(title: string): void {
+		this.title = title;
+	}
 }
