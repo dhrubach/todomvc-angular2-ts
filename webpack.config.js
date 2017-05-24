@@ -3,6 +3,12 @@
 const webpack = require('webpack');
 const path = require('path');
 
+const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
+
+const HTMLWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
 const config = {
 	entry: './src/main.js',
 	output: {
@@ -37,6 +43,13 @@ const config = {
 			{
 				test: /\.html$/,
 				use: 'raw-loader' // returns contents of a file as a string
+			},
+			{
+				test: /\.css$/,
+				use: ExtractTextPlugin.extract({
+					fallback: 'style-loader',
+					use: 'css-loader'
+				})
 			}
 		]
 	},
@@ -49,6 +62,14 @@ const config = {
 		}),
 		new webpack.optimize.CommonsChunkPlugin({
 			name: 'manifest'
+		}),
+		new HTMLWebpackPlugin({
+			title: 'Angular2 with ES2015 & Typescript • TodoMVC',
+			template: './src/index.ejs',
+			filename: 'index.html'
+		}),
+		new ExtractTextPlugin({
+			filename: 'styles.css'
 		})
 	],
 	resolve: {
@@ -62,5 +83,9 @@ const config = {
 
 	devtool: 'cheap-module-source-map'
 };
+
+if(ENV === 'production') {
+	config.plugins.push(new OptimizeCssAssetsPlugin());
+}
 
 module.exports = config;

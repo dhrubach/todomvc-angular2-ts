@@ -7,6 +7,9 @@ import 'rxjs';
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
+import 'todomvc-app-css/index.css';
+import 'todomvc-common/base.css';
+
 import { MainModule } from './main.module';
 
 platformBrowserDynamic().bootstrapModule(MainModule);
