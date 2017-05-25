@@ -2,46 +2,35 @@ import { Injectable } from '@angular/core';
 
 import { TodoModel } from '../models/todo.model';
 
+@Injectable()
 export class TodoStoreService {
 	private todos: TodoModel[];
 	private completedTodos: TodoModel[];
 	private remainingTodos: TodoModel[];
 
 	constructor() {
-		const persistedTodos: TodoModel[] =
-			(JSON.parse(localStorage.getItem('angular2-todos')) || []) as TodoModel[];
+		const persistedTodos =
+			(JSON.parse(localStorage.getItem('angular2-todos')) || []);
 
-		this.todos = persistedTodos.map((todo) => {
-			const ret = new TodoModel(todo.title, todo.completed);
-			ret.uuid = todo.uuid;
-			return ret;
+		this.todos = persistedTodos.map((todo: TodoModel) => {
+			const tempTodo = new TodoModel(todo.title, false);
+			tempTodo.uuid = todo.uuid;
+			return tempTodo;
 		});
 
 		this.completedTodos = [];
 		this.remainingTodos = [];
 	}
 
-	public get(state): TodoModel[] {
+	// get
+
+	public getByState(state): TodoModel[] {
 		return this.todos.filter((todo) => todo.completed === state.completed);
-	}
-
-	public allCompleted(): boolean {
-		return this.todos.length === this.getCompleted().length;
-	}
-
-	public setAllTo(completed: boolean): void {
-		this.todos.forEach((todo) => todo.completed = completed);
-		this.persist();
-	}
-
-	public removeCompleted(): void {
-		this.todos = this.get({ completed: false });
-		this.persist();
 	}
 
 	public getRemaining(): TodoModel[] {
 		if (!(this.remainingTodos && this.remainingTodos.length)) {
-			this.remainingTodos = this.get({ completed: false });
+			this.remainingTodos = this.getByState({ completed: false });
 		}
 
 		return this.remainingTodos;
@@ -49,19 +38,21 @@ export class TodoStoreService {
 
 	public getCompleted(): TodoModel[] {
 		if (!(this.completedTodos && this.completedTodos.length)) {
-			this.completedTodos = this.get({ completed: true });
+			this.completedTodos = this.getByState({ completed: true });
 		}
 
 		return this.completedTodos;
 	}
 
-	public toggleCompletion(uid: string): void {
-		const todo: TodoModel = this.findByUid(uid);
+	public getAllPersisted(): TodoModel[] {
+		return this.todos;
+	}
 
-		if (todo) {
-			todo.completed = !todo.completed;
-			this.persist();
-		}
+	// add / remove
+
+	public add(title: string = ''): void {
+		this.todos.push(new TodoModel(title, false));
+		this.persist();
 	}
 
 	public remove(uid: string): void {
@@ -73,15 +64,39 @@ export class TodoStoreService {
 		}
 	}
 
-	public add(title: string = ''): void {
-		this.todos.push(new TodoModel(title, false));
+	public removeCompleted(): void {
+		this.todos = this.getByState({ completed: false });
 		this.persist();
+	}
+
+	// state change
+
+	public setAllTo(completed: boolean): void {
+		this.todos.forEach((todo) => todo.completed = completed);
+		this.persist();
+	}
+
+	public toggleCompletion(uid: string): void {
+		const todo: TodoModel = this.findByUid(uid);
+
+		if (todo) {
+			todo.completed = !todo.completed;
+			this.persist();
+		}
+	}
+
+	// helpers
+
+	public hasAllCompleted(): boolean {
+		return this.todos.length === this.getCompleted().length;
 	}
 
 	public persist(): void {
 		this.clearCache();
 		localStorage.setItem('angular2-todos', JSON.stringify(this.todos));
 	}
+
+	// private functions
 
 	private findByUid(uid: string): TodoModel {
 		const matchedTodo: TodoModel[] =

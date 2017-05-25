@@ -1,22 +1,19 @@
 import { Component } from '@angular/core';
 
 import { TodoStoreService } from '../../services/todo-store.service';
-import template from './todo-header.template.html';
 
 @Component({
 	selector: 'todo-header',
-	template: template
+	template: require('./todo-header.template.html'),
 })
 export class TodoHeaderComponent {
-	newTodo = '';
+	public newTodo: string;
 
-	constructor(todoStore:TodoStoreService) {
-		this._todoStore = todoStore;
-	}
+	constructor(private todoStore: TodoStoreService) { }
 
-	addTodo() {
+	public addTodo(): void {
 		if (this.newTodo.trim().length) {
-			this._todoStore.add(this.newTodo);
+			this.todoStore.add(this.newTodo);
 			this.newTodo = '';
 		}
 	}

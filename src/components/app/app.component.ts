@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 
-import template from './app.template.html';
-
 @Component({
 	selector: 'todo-app',
-	template: template
+	template: require('./app.template.html'),
 })
 export class AppComponent {}

@@ -7,7 +7,7 @@ import { TodoStoreService } from '../../services/todo-store.service';
 
 @Component({
 	selector: 'todo-footer',
-	template: require('./todo-footer.template.html')
+	template: require('./todo-footer.template.html'),
 })
 export class TodoFooterComponent implements OnInit {
 	private currentStatus: string;
@@ -28,9 +28,8 @@ export class TodoFooterComponent implements OnInit {
 		this.todoStore.removeCompleted();
 	}
 
-	public getCount() {
-		return this.todoStore.getRemaining().length
-			+ this.todoStore.getCompleted().length;
+	public getCount(): number {
+		return this.todoStore.getAllPersisted().length;
 	}
 
 	public getRemainingCount(): number {
