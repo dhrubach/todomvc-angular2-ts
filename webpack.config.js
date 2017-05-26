@@ -8,9 +8,10 @@ const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 
 const config = {
-	entry: './src/main.js',
+	entry: './src/main.ts',
 	output: {
 		path: path.resolve(__dirname, 'dist'),
 		filename: '[name].[chunkhash].js'
@@ -70,7 +71,12 @@ const config = {
 		}),
 		new ExtractTextPlugin({
 			filename: 'styles.css'
-		})
+		}),
+		new ContextReplacementPlugin(
+            // The (\\|\/) piece accounts for path separators in *nix and Windows
+            /angular(\\|\/)core(\\|\/)@angular/,
+            path.resolve(__dirname, 'src') // location of your Client
+        )
 	],
 	resolve: {
 		extensions: ['.ts', '.tsx', '.js']
